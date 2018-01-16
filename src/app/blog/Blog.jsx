@@ -5,7 +5,7 @@ import React from 'react';
 import axios from 'axios';
 
 // Render blog component
-import BlogPost from './Post';
+import {BlogPost} from './Post';
 
 // Render static HTML:
 import __html from './blog.html';
@@ -43,7 +43,7 @@ class Blog extends React.Component {
         });
         let posts = blogPosts.map((post, index) => {
             return(                 
-                <div key={index}>                    
+                <div className="blog-post" key={index}>                    
                     <BlogPost data={post}/>
                 </div>
             )

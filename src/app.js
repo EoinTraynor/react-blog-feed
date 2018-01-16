@@ -14,7 +14,7 @@ import { Router, Route, IndexRoute, Redirect, browserHistory } from 'react-route
 import App from './app/App';
 import About from './app/about';
 import Home from './app/home';
-import Blog from './app/blog';
+import {Blog, IndividualPost} from './app/blog';
 
 render((
   <Router history={browserHistory}>
@@ -23,7 +23,7 @@ render((
       <Route path='about' component={About}/>
       <Route path='home' component={Home}/>
       <Route path='blog' component={Blog}/>
-      <Route path='post' component={Blog}/>
+      <Route path='blog/post/:id' component={IndividualPost}/>
       <Redirect from='*' to='/home'/>
     </Route>
   </Router>

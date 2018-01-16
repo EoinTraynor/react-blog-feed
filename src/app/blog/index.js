@@ -1,3 +1,7 @@
 import Blog from './Blog';
+import {IndividualPost} from './Post';
 
-export default Blog;
+module.exports = {
+    Blog,    
+    IndividualPost
+}

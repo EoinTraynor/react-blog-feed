@@ -3,16 +3,21 @@ import axios from 'axios';
 import {Link} from 'react-router';
 
 class BlogPost extends React.Component {
-    constructor(props){        
-        console.log('new comp');
-        super(props);
+    constructor(props){                
+        super(props);        
+        // console.log(this);
+        // console.log(props);
+        // console.log(this.props);
         this.state = {
-            post: props.data,
+            post: {me:"me"},
             comments: []
         }
     }        
     
-    componentWillMount(){                
+    componentWillMount(){
+        console.log(this);                
+        console.log(this.props);                
+        console.log(this.state);                
         axios({
             method: 'get',
             url: `http://localhost:9001/posts/${this.state.post.id}/comments`
@@ -27,13 +32,14 @@ class BlogPost extends React.Component {
     }
     
     render(){
+        console.log('render');
         const {post, comments} = this.state;        
         const cardStyle = {
             padding: "20px",
             margin: "20px 0"
         }
         
-        console.log("called");
+        // console.log(this.state.comments);
         const postComments = comments.map((comment, index) => {
             return <li key={index} className="list-group-item">{comment.content}</li>
         });
@@ -45,7 +51,7 @@ class BlogPost extends React.Component {
                         <span className="date-published font-weight-light font-italic">Date Posted: {post.publish_date} </span>
                     </h6>                    
                     <p className="card-text">{post.content}</p>
-                    <Link to={`/post/${post.id}`} className="card-link">View Comments</Link>                    
+                    <Link to={{pathname: `blog/post/${post.id}`}} className="card-link">View Comments</Link>                    
                 </div>          
                 <ul className="list-group list-group-flush">
                     {postComments}
@@ -55,9 +61,45 @@ class BlogPost extends React.Component {
     }
 }
 
-const Comment = ({data}) => {
-    // console.log(data);
-    return <li className="list-group-item">{data.content}</li>;
+class IndividualPost extends React.Component{
+    constructor(){                
+        super();
+        this.state = {                     
+            post: {}            
+        }
+    }   
+
+    componentWillMount(){
+        const id = this.props.params.id;
+        axios({
+            method: 'get',
+            url: `http://localhost:9001/posts/${id}`
+        })
+        .then(response => {
+            if (response.status != 200) {                
+                throw Error(response.statusText);
+            }
+            return response.data;        
+        })
+        .then(data => {
+            this.setState({post: data});            
+        })
+        .catch(err => console.log(err));
+    }
+
+    render(){      
+        // console.log(this.state);        
+        return(                 
+            <div className="blog-post">                    
+                <BlogPost data={this.state.post}/>
+            </div>
+        )        
+    }
 }
 
-export default BlogPost;
+module.exports = {
+    BlogPost,
+    IndividualPost
+}
+
+// export default BlogPost;
